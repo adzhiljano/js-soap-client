@@ -292,8 +292,14 @@ SOAPClient._onSendSoapRequest = function(method, async, callback, wsdl, req)
                 throw new Error(500, req.responseXML.getElementsByTagName("faultstring")[0].childNodes[0].nodeValue);
         }
     }
-    else
-        o = SOAPClient._soapresult2object(nd[0], wsdl);
+    else if(nd.length == 1)
+    	o = SOAPClient._soapresult2object(nd[0], wsdl);
+    else {
+    	o = [];
+    	for (var i = 0; i < nd.length; i++) {
+    		o.push(SOAPClient._soapresult2object(nd[i], wsdl));
+    	}
+    }
     if(callback)
         callback(o, req.responseXML);
     if(!async)
